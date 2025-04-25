@@ -56,7 +56,50 @@ Go to Statistics > Endpoints > IPv4 > Tx Bytes (toggle it to display in descendi
 Ans: 115.178.9.18
 
 PCAP 2
+1. What is the WebAdmin password?
 
+Go to Statistics > Protocol Hierachy. It makes sense that I should be looking at HTTP traffic in this case.
 
+<img width="661" alt="Screenshot 2025-04-25 145138" src="https://github.com/user-attachments/assets/36db367d-45ca-423e-99f5-dece4f80593e" />
 
+Type "http" into display filter, there is a GET request under Packet 2141, for a password.txt file. 
 
+![image](https://github.com/user-attachments/assets/2d2f7597-3786-48fd-a95c-eb773eea8a0f)
+
+Right click on packet > Follow > HTTP Stream
+
+![image](https://github.com/user-attachments/assets/2756973d-fb63-461c-a7fe-b4914fc6c64b)
+
+Ans: sbt123
+
+2. What is the version number of the attacker’s FTP server?
+
+From Question 1, we can deduce the source IP address of the attacker as well. In the display filter, type in "ftp and ip.src == 192.168.56.1". Select Packet 4243. On the bottom left panel, click to drop down File Transfer Protocol (FTP) to show the version of the FTP server (pyftpdlib).
+
+![image](https://github.com/user-attachments/assets/66a3f19e-1271-46b0-9fd8-474bca38041b)
+
+Ans: 1.5.5
+
+3. Which port was used to gain access to the victim Windows host?
+
+From Question 1, we deduce that the source IP address (attacker) is 192.168.56.1, and the target (destination) IP address is 192.168.56.103. Using "ip.src == 192.168.56.1 and ip.dst == 192.168.56.103 and tcp.flags.ack == 1" as display filter, this displays all packets from the attacker to the target with ACK flag set. Scrolling up to the very first packet, we see the port used by the attacker to first gain access to the target.
+
+![image](https://github.com/user-attachments/assets/df7d5dc8-571c-477b-8072-1e86a8f5b91a)
+
+Ans: 8081
+
+4. What is the name of a confidential file on the Windows host?
+
+Using Packet 4130 from the previous question, Right click > Follow > TCP Stream. Find "confidential".
+
+<img width="365" alt="Screenshot 2025-04-25 221431" src="https://github.com/user-attachments/assets/e8708a6b-5c0c-4420-bae8-6f8d2e3a7376" />
+
+Ans: Employee_Information_CONFIDENTIAL.txt
+
+5. What is the name of the log file that was created at 4:51 AM on the Windows host?
+
+Using the same TCP Stream has the previous question, type ".log" into Find, look for a log file created at 4:51 AM.
+
+![image](https://github.com/user-attachments/assets/1ffb0d3a-5b6b-4993-8d24-ce4680a6f72c)
+
+Ans: LogFile.log
